@@ -4,8 +4,8 @@ import { CharacterInterface } from "./character.interface";
 import { ERRORS_TEXT } from "../errors/errors-text";
 
 export class Warrior extends Character implements CharacterInterface {
-  constructor(name: string, id: string) {
-    super(name, CONSTANTS.DEFAULT_WARRIOR_HEALTH, id);
+  constructor(nickName: string, id: string) {
+    super(nickName, CONSTANTS.DEFAULT_WARRIOR_HEALTH, id);
   }
 
   override canBeAttackedPhysically(): boolean {
