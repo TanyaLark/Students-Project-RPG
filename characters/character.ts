@@ -1,5 +1,5 @@
 import { CharacterInterface } from "./character.interface";
-import { ERRORS_TEXT } from "./errors/errors-text";
+import { ERRORS_TEXT } from "../errors/errors-text";
 
 export abstract class Character implements CharacterInterface {
   public nickName: string;

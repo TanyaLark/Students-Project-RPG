@@ -1,7 +1,7 @@
 import { Character } from "./character";
-import { CONSTANTS } from "./constants";
+import { CONSTANTS } from "../constants";
 import { CharacterInterface } from "./character.interface";
-import { ERRORS_TEXT } from "./errors/errors-text";
+import { ERRORS_TEXT } from "../errors/errors-text";
 
 export class Mage extends Character implements CharacterInterface {
   constructor(name: string, id: string) {
