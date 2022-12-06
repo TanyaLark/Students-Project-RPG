@@ -8,29 +8,29 @@ export class Warrior extends Character implements CharacterInterface {
     super(nickName, CONSTANTS.DEFAULT_WARRIOR_HEALTH, id);
   }
 
-  override canBeAttackedPhysically(): boolean {
+  canBeAttackedPhysically(): boolean {
     return !this.skillActive;
   }
 
-  override canBeAttackedMagically(): boolean {
+  canBeAttackedMagically(): boolean {
     return true;
   }
 
-  override useSkill(): void {
+  useSkill(): void {
     if (this.skillBlock) {
       throw new Error(ERRORS_TEXT.CANNOT_USE_SKILL);
     }
     this.skillActive = true;
   }
 
-  override revive(): void {
+  revive(): void {
     if (this.health > 0) {
       return;
     }
     this.health = CONSTANTS.DEFAULT_WARRIOR_HEALTH;
   }
 
-  override attack(enemy: CharacterInterface): CharacterInterface {
+  attack(enemy: CharacterInterface): CharacterInterface {
     if (!enemy.canBeAttackedPhysically()) {
       throw new Error(ERRORS_TEXT.CANNOT_ATTACK);
     }

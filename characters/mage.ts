@@ -8,15 +8,15 @@ export class Mage extends Character implements CharacterInterface {
     super(name, CONSTANTS.DEFAULT_MAGE_HEALTH, id);
   }
 
-  override canBeAttackedPhysically(): boolean {
+  canBeAttackedPhysically(): boolean {
     return true;
   }
 
-  override canBeAttackedMagically(): boolean {
+  canBeAttackedMagically(): boolean {
     return true;
   }
 
-  override useSkill(enemy?: CharacterInterface): void {
+  useSkill(enemy?: CharacterInterface): void {
     if (!enemy) {
       throw new Error(ERRORS_TEXT.ENEMY_IS_MISSING);
     }
@@ -25,14 +25,14 @@ export class Mage extends Character implements CharacterInterface {
     }
   }
 
-  override revive(): void {
+  revive(): void {
     if (this.health > 0) {
       return;
     }
     this.health = CONSTANTS.DEFAULT_MAGE_HEALTH;
   }
 
-  override attack(enemy: CharacterInterface): CharacterInterface {
+  attack(enemy: CharacterInterface): CharacterInterface {
     if (!enemy.canBeAttackedMagically()) {
       throw new Error(ERRORS_TEXT.CANNOT_ATTACK);
     }
