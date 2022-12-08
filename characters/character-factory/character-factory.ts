@@ -7,7 +7,7 @@ import { Mage } from "../mage";
 import { ERRORS_TEXT } from "../../errors/errors-text";
 
 export class CharacterFactory extends AbstractCharacterFactory {
-  override createCharacter(character: CharactersEnum, nickName: string, id: string): CharacterInterface {
+  createCharacter(character: CharactersEnum, nickName: string, id: string): CharacterInterface {
     switch (character) {
       case CharactersEnum.WARRIOR:
         return new Warrior(nickName, id);
