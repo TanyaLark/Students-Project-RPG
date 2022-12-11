@@ -1,12 +1,10 @@
 import { CharacterInterface } from "./character.interface";
-import { ERRORS_TEXT } from "./errors/errors-text";
 
 export abstract class Character implements CharacterInterface {
   public nickName: string;
   public health: number;
   public id: string;
   protected skillActive = false; //состояния: применил/не применил Хочет ли применить умение персонаж
-
   protected skillBlock = false; //состояния: заколдован()/не заколдован()  Персонаж заколдован магом и не может применить умение
 
   protected constructor(nickName: string, health: number, id: string) {
@@ -15,25 +13,15 @@ export abstract class Character implements CharacterInterface {
     this.id = id;
   }
 
-  useSkill() {
-    throw new Error(ERRORS_TEXT.METHOD_NOT_IMPLEMENTED);
-  }
+  abstract useSkill(): void
 
-  attack(enemy: CharacterInterface): CharacterInterface {
-    throw new Error(ERRORS_TEXT.METHOD_NOT_IMPLEMENTED);
-  }
+  abstract attack(enemy: CharacterInterface): CharacterInterface
 
-  canBeAttackedPhysically(): boolean {
-    throw new Error(ERRORS_TEXT.METHOD_NOT_IMPLEMENTED);
-  }
+  abstract canBeAttackedPhysically(): boolean
 
-  canBeAttackedMagically(): boolean {
-    throw new Error(ERRORS_TEXT.METHOD_NOT_IMPLEMENTED);
-  }
+  abstract canBeAttackedMagically(): boolean
 
-  revive(): void {
-    throw new Error(ERRORS_TEXT.METHOD_NOT_IMPLEMENTED);
-  }
+  abstract revive(): void
 
   decreaseHealth(damageHealthValue: number): void {
     this.health = this.health - damageHealthValue;
