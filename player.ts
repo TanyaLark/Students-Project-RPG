@@ -1,19 +1,23 @@
-class Player {
-  public name: string;
-  private login: string;
-  private password: string;
-  public character: string;
-  public id: string;
+import { CharactersEnum } from "./enums/characters.enum";
 
+export class Player {
+  public nickname: string;
+  public email: string;
+  public password: string;
+  public confirmPassword: string;
+  public character: CharactersEnum;
+  public id?: string;
 
-  constructor(name: string,
-              logon: string,
+  constructor(nickname: string,
+              email: string,
               password: string,
-              character: string,
-              id: string) {
-    this.name = name;
-    this.login = logon;
+              confirmPassword: string,
+              character: CharactersEnum,
+              id?: string) {
+    this.nickname = nickname;
+    this.email = email;
     this.password = password;
+    this.confirmPassword = confirmPassword;
     this.character = character;
     this.id = id;
   }
