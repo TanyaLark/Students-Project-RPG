@@ -15,6 +15,9 @@ export const ERRORS_TEXT = {
   REQUIRED_PARAMETER_MISSING: `Required parameter missing`,
   PASSWORDS_MUST_NOT_MATCH: `Passwords must not match`,
   UNKNOWN_SERVER_ERROR: `Unknown server error`,
+  PROPERTY_MISSING: (propertyName: string) => `Property ${propertyName} missing`,
+  INVALID_EVENT: `Invalid event`,
+  ID_IS_INCORRECT: 'Field id has incorrect structure'
 }
 
 export const SUCCESS_TEXT = {

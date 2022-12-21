@@ -1,4 +1,4 @@
-import express, { Express, Request, Response } from 'express';
+import express, { Express, Request } from 'express';
 import dotenv from 'dotenv';
 import ws from 'ws';
 import bodyParser from "body-parser";
@@ -8,6 +8,7 @@ import { handleEvent } from "./controllers/events-controller";
 import { SocketStorage } from "./socket-storage/socket-storage";
 import { userRouter } from "./router/user-router";
 import { classRouter } from "./router/class-router";
+import { eventValidator } from "./middleware/validators/event-validator";
 
 dotenv.config();
 
@@ -34,7 +35,11 @@ wsServer.on('connection', (socket, request: Request) => {
 
   //***
   socket.on('message', message => {
-
+    try {
+      eventValidator(message);
+    } catch (e) {
+      socket.close();
+    }
     const messageObject: MessageObjectInterface = JSON.parse(message.toString());
     //** event controller
     handleEvent(messageObject, userId);
