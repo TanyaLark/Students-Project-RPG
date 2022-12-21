@@ -13,14 +13,14 @@ export default function authorization(
   const token = getTokenFromHeader(req) as string;
   if (!token) {
     res.status(401).send(ERRORS_TEXT.UNAUTHORIZED);
-    next();
+    return;
   }
   try {
     req.decodedInfoFromJWT = jwt.verify(token, process.env.JWT_SECRET) as DecodedUserInfo;
     next();
   } catch (e) {
     res.status(401).send(ERRORS_TEXT.UNAUTHORIZED);
-    next();
+    return;
   }
 }
 

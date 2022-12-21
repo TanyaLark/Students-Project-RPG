@@ -2,50 +2,46 @@ import express, { Express, Request, Response } from 'express';
 import dotenv from 'dotenv';
 import ws from 'ws';
 import bodyParser from "body-parser";
-import { EventsEnum } from "./enums/events.enum";
-import { usersController } from "./controllers/user-controller";
-import { classController } from "./controllers/class-controller";
+import * as jwt from "jsonwebtoken";
+import { MessageObjectInterface } from "./controllers/message-object.interface";
+import { handleEvent } from "./controllers/events-controller";
+import { SocketStorage } from "./socket-storage/socket-storage";
+import { userRouter } from "./router/user-router";
+import { classRouter } from "./router/class-router";
 
 dotenv.config();
 
 const app: Express = express();
 
 app.use(bodyParser.json());
-app.use('/user', usersController);
-app.use('/characters', classController);
+app.use('/user', userRouter);
+app.use('/characters', classRouter);
 
 const port = process.env.PORT || 8000;
-
 const wsServer = new ws.Server({ noServer: true });
 
-interface MessageObjectInterface {
-  event_type: EventsEnum,
-  event_data: {
-    target_id?: string;
-  },
-}
+wsServer.on('connection', (socket, request: Request) => {
+  // console.log(request.headers.token);
+  let userId: any;
+  try {
+    const token = request.headers.token as string;
+    userId = (jwt.verify(token, process.env.JWT_SECRET as string) as any).id;
+  } catch (e) {
+    socket.close();
+  }
+  console.log('connection event triggered');
+  SocketStorage.addSocketToStorage(userId, socket);
 
-wsServer.on('connection', socket => {
-
+  //***
   socket.on('message', message => {
+
     const messageObject: MessageObjectInterface = JSON.parse(message.toString());
-    switch (messageObject.event_type) {
-      case EventsEnum.attack:
-        console.log(`ATTACK ${messageObject.event_data.target_id}`);
-        break;
-      case EventsEnum.power:
-        console.log(`POWER ${messageObject.event_data.target_id}`);
-        break;
-      case EventsEnum.message:
-        console.log("MESSAGE");
-        break;
-      case EventsEnum.revival:
-        console.log(`REVIVAL ${messageObject.event_data.target_id}`);
-        break;
-    }
+    //** event controller
+    handleEvent(messageObject, userId);
   });
 
   socket.on('close', () => {
+    SocketStorage.deleteSocketFromStorage(userId);
     console.log('WS close');
   })
 });

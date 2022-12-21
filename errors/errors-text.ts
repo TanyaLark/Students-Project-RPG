@@ -13,7 +13,8 @@ export const ERRORS_TEXT = {
   INVALID_CHARACTER: `Invalid character`,
   CREATE_NEW_PASSWORD: `Create new password`,
   REQUIRED_PARAMETER_MISSING: `Required parameter missing`,
-  PASSWORDS_MUST_NOT_MATCH: `Passwords must not match`
+  PASSWORDS_MUST_NOT_MATCH: `Passwords must not match`,
+  UNKNOWN_SERVER_ERROR: `Unknown server error`,
 }
 
 export const SUCCESS_TEXT = {

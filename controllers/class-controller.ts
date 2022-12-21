@@ -1,10 +1,7 @@
-import express from 'express';
-import { getClassList } from "../services/classService/class.service";
-import authorization from "../middleware/auth/authorization";
+import { Request, Response } from 'express';
+import { classService } from "../services/class-service/class.service";
 
-const classController = express.Router();
-
-classController.get('/all', authorization, getClassList);
-
-export { classController };
-
+export async function classController(req: Request, res: Response) {
+  res.status(200).send(await classService());
+  return;
+}
