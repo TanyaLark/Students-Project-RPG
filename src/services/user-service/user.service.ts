@@ -1,7 +1,7 @@
-import { Player } from "../../player";
+import { User } from "../../entities/user/user";
 import { PlayerRepository } from "../../fake-data/fake-user-repository";
 import { CharactersEnum } from "../../enums/characters.enum";
-import { buildUserRO } from "./utils/build-user-response-object";
+import { buildUserRO } from "../../entities/user/utils/build-user-response-object";
 import { ERRORS_TEXT } from "../../errors/errors-text";
 
 const userRepository = new PlayerRepository();
@@ -12,9 +12,8 @@ export async function userRegistrationService(
   password: string,
   confirmPassword: string,
   character: CharactersEnum) {
-  const player = new Player(nickname, email, password, confirmPassword, character);
-  const savedPlayer = await userRepository.saveNewPlayer(player);
-  return savedPlayer;
+  const player = new User(nickname, email, password, confirmPassword, character);
+  return await userRepository.saveNewPlayer(player);
 }
 
 export async function userLoginService(email: string) {

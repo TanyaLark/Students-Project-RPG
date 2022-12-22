@@ -1,10 +1,10 @@
 import { AbstractCharacterFactory } from "./abstract-character-factory";
 import { CharacterInterface } from "../character.interface";
-import { CharactersEnum } from "../../enums/characters.enum";
+import { CharactersEnum } from "../../../enums/characters.enum";
 import { Warrior } from "../warrior";
 import { Thief } from "../thief";
 import { Mage } from "../mage";
-import { ERRORS_TEXT } from "../../errors/errors-text";
+import { ERRORS_TEXT } from "../../../errors/errors-text";
 
 export class CharacterFactory extends AbstractCharacterFactory {
   override createCharacter(character: CharactersEnum, nickName: string, id: string): CharacterInterface {

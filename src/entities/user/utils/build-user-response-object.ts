@@ -1,7 +1,7 @@
 import { CharactersEnum } from "../../../enums/characters.enum";
-import { Player } from "../../../player";
+import { User } from "../user";
 
-export function buildUserRO(player: Player): UserRO {
+export function buildUserRO(player: User): UserRO {
   return {
     id: player.id!,
     nickname: player.nickname,

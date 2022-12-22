@@ -1,6 +1,6 @@
-import { CharactersEnum } from "./enums/characters.enum";
+import { CharactersEnum } from "../../enums/characters.enum";
 
-export class Player {
+export class User {
   public nickname: string;
   public email: string;
   public password: string;

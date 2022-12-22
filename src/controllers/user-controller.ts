@@ -5,7 +5,7 @@ import {
   userUpdateService
 } from "../services/user-service/user.service";
 import { RequestWithDecodedInfo } from "../middleware/auth/authorization";
-import { buildUserRO } from "../services/user-service/utils/build-user-response-object";
+import { buildUserRO } from "../entities/user/utils/build-user-response-object";
 import { ERRORS_TEXT } from "../errors/errors-text";
 import { generateJwtToken } from "../authorization/generate-jwt-token";
 

@@ -1,11 +1,11 @@
 import { Character } from "./character";
-import { CONSTANTS } from "../constants";
+import { CONSTANTS } from "../../constants";
 import { CharacterInterface } from "./character.interface";
-import { ERRORS_TEXT } from "../errors/errors-text";
+import { ERRORS_TEXT } from "../../errors/errors-text";
 
-export class Warrior extends Character implements CharacterInterface {
-  constructor(nickName: string, id: string) {
-    super(nickName, CONSTANTS.DEFAULT_WARRIOR_HEALTH, id);
+export class Thief extends Character implements CharacterInterface {
+  constructor(name: string, id: string) {
+    super(name, CONSTANTS.DEFAULT_THIEF_HEALTH, id);
   }
 
   canBeAttackedPhysically(): boolean {
@@ -13,7 +13,7 @@ export class Warrior extends Character implements CharacterInterface {
   }
 
   canBeAttackedMagically(): boolean {
-    return true;
+    return !this.skillActive;
   }
 
   useSkill(): void {
@@ -27,15 +27,14 @@ export class Warrior extends Character implements CharacterInterface {
     if (this.health > 0) {
       return;
     }
-    this.health = CONSTANTS.DEFAULT_WARRIOR_HEALTH;
+    this.health = CONSTANTS.DEFAULT_THIEF_HEALTH;
   }
 
   attack(enemy: CharacterInterface): CharacterInterface {
     if (!enemy.canBeAttackedPhysically()) {
       throw new Error(ERRORS_TEXT.CANNOT_ATTACK);
     }
-    enemy.decreaseHealth(CONSTANTS.WARRIOR_ATTACK);
+    enemy.decreaseHealth(CONSTANTS.THIEF_ATTACK);
     return enemy;
   }
-
 }

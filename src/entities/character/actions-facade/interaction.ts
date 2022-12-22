@@ -1,6 +1,6 @@
 import { CharacterInterface } from "../character.interface";
 import { CharacterFactory } from "../character-factory/character-factory";
-import { CharactersEnum } from "../../enums/characters.enum";
+import { CharactersEnum } from "../../../enums/characters.enum";
 
 export class Interaction {
   private characterFactory: CharacterFactory;
