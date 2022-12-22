@@ -1,6 +1,6 @@
 export enum EventsEnum {
   attack = "attack",
-  power = "power",
+  ability = "ability",
   message = "message",
   revival = "revival"
 }

@@ -1,20 +1,21 @@
 import { Player } from "../player";
 import { randomUUID } from "crypto";
 
+const PlayersArray: Player[] = [];
+
 export class PlayerRepository {
-  private PlayersArray: Player[] = [];
 
   constructor() {
   }
 
   async saveNewPlayer(user: Player): Promise<Player> {
     user.id = randomUUID();
-    this.PlayersArray.push(user);
+    PlayersArray.push(user);
     return user;
   }
 
   async findOnePlayerById(userId: string): Promise<Player | null> {
-    const foundPlayer = this.PlayersArray.find((user: Player) => {
+    const foundPlayer = PlayersArray.find((user: Player) => {
       return user.id === userId;
     })
     if (foundPlayer) {
@@ -24,7 +25,7 @@ export class PlayerRepository {
   }
 
   async findOnePlayerByEmail(userEmail: string): Promise<Player | null> {
-    const foundPlayer = this.PlayersArray.find((user: Player) => {
+    const foundPlayer = PlayersArray.find((user: Player) => {
       return user.email === userEmail;
     })
     if (foundPlayer) {
@@ -35,10 +36,10 @@ export class PlayerRepository {
 
   async deletePlayer(userId: string): Promise<Player | null> {
     const userToDelete = this.findOnePlayerById(userId);
-    const indexOfPlayerToDelete = this.PlayersArray.findIndex((user: Player) => {
+    const indexOfPlayerToDelete = PlayersArray.findIndex((user: Player) => {
       return user.id === userId;
     });
-    this.PlayersArray.splice(indexOfPlayerToDelete, 1);
+    PlayersArray.splice(indexOfPlayerToDelete, 1);
     return userToDelete;
   }
 
@@ -46,6 +47,6 @@ export class PlayerRepository {
     if (user.id) {
       await this.deletePlayer(user.id);
     }
-    this.PlayersArray.push(user);
+    PlayersArray.push(user);
   }
 }
