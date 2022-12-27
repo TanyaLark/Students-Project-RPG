@@ -3,6 +3,7 @@ import validator from "validator";
 import { ERRORS_TEXT } from "../../errors/errors-text";
 import { validateStringWithEnum } from "../../helpers/string-enum-validation";
 import { CharactersEnum } from "../../enums/characters.enum";
+import { HttpError } from "../../errors/http-error.class";
 
 export default function userUpdateValidator(
   req: Request,
@@ -17,23 +18,19 @@ export default function userUpdateValidator(
   const character = req.body['character'];
 
   if (!nickname || !email || !password || !newPassword || !confirmNewPassword || !character) {
-    res.status(400).send(ERRORS_TEXT.REQUIRED_PARAMETER_MISSING);
-    next();
+    next(new HttpError(400, ERRORS_TEXT.REQUIRED_PARAMETER_MISSING, 'update validation'));
   }
 
   if (validator.isEmpty(nickname)) {
-    res.status(400).send(ERRORS_TEXT.ENTER_NICKNAME);
-    next();
+    next(new HttpError(400, ERRORS_TEXT.ENTER_NICKNAME, 'update validation'));
   }
 
   if (!validator.isEmail(email)) {
-    res.status(400).send(ERRORS_TEXT.INVALID_EMAIL);
-    next();
+    next(new HttpError(400, ERRORS_TEXT.INVALID_EMAIL, 'update validation'));
   }
 
   if (newPassword === password) {
-    res.status(400).send(ERRORS_TEXT.PASSWORDS_MUST_NOT_MATCH);
-    next();
+    next(new HttpError(400, ERRORS_TEXT.PASSWORDS_MUST_NOT_MATCH, 'update validation'));
   }
 
   if (!validator.isStrongPassword(newPassword, {
@@ -44,18 +41,15 @@ export default function userUpdateValidator(
     minSymbols: 0,
     returnScore: false,
   })) {
-    res.status(400).send(ERRORS_TEXT.INVALID_PASSWORD);
-    next();
+    next(new HttpError(400, ERRORS_TEXT.INVALID_PASSWORD, 'update validation'));
   }
 
   if (confirmNewPassword !== newPassword) {
-    res.status(400).send(ERRORS_TEXT.PASSWORDS_DO_NOT_MATCH);
-    next();
+    next(new HttpError(400, ERRORS_TEXT.PASSWORDS_DO_NOT_MATCH, 'update validation'));
   }
 
   if (!validateStringWithEnum(character, CharactersEnum)) {
-    res.status(400).send(ERRORS_TEXT.INVALID_CHARACTER);
-    next();
+    next(new HttpError(400, ERRORS_TEXT.INVALID_CHARACTER, 'update validation'));
   }
   next();
 }

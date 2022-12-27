@@ -1,5 +1,4 @@
 import { WebSocket } from "ws";
-import { MessageObjectInterface } from "../controllers/message-object.interface";
 
 const map = new Map();
 
@@ -16,16 +15,20 @@ export class SocketStorage {
     return map.get(userId);
   }
 
-  static sendMessage(userId: string, message: MessageObjectInterface) {
-    const socket = map.get(userId);
-    socket.send(JSON.stringify(message));
-  }
-
-  static sendMessageToAll(senderId: string, message: MessageObjectInterface) {
+  static getAllSockets(): {
+    userId: string,
+    socket: WebSocket;
+  }[] {
+    const socketArray: {
+      userId: string,
+      socket: WebSocket;
+    }[] = [];
     map.forEach((socket, userId) => {
-      if (senderId !== userId) {
-        socket.send(JSON.stringify(message));
-      }
+      socketArray.push({
+        userId: userId,
+        socket: socket,
+      });
     });
+    return socketArray;
   }
 }

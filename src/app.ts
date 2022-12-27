@@ -6,6 +6,8 @@ import ws, { Server as WS_server } from "ws";
 import dotenv from "dotenv";
 import bodyParser from "body-parser";
 import { wsEventHandler } from "./event-handler/ws-event-handler";
+import { LoggerService } from "./logger/logger.service";
+import { ExceptionFilter } from "./errors/exception.filter";
 
 dotenv.config();
 
@@ -14,10 +16,17 @@ export class App {
   httpServer: HTTP_server;
   wsServer: WS_server;
   port: number;
+  logger: LoggerService;
+  exceptionFilter: ExceptionFilter;
 
-  constructor() {
+  constructor(
+    logger: LoggerService,
+    exceptionFilter: ExceptionFilter
+  ) {
     this.app = express();
     this.port = 8000; //process.env.PORT || 8000;
+    this.logger = logger;
+    this.exceptionFilter = exceptionFilter;
   }
 
   useMiddleware() {
@@ -29,9 +38,14 @@ export class App {
     this.app.use('/character', classRouter);
   }
 
+  useExceptionFilters() {
+    this.app.use(this.exceptionFilter.catch.bind(this.exceptionFilter));
+  }
+
   public async init() {
     this.useMiddleware();
     this.useRoutes();
+    this.useExceptionFilters();
     this.httpServer = this.app.listen(this.port);
     this.wsServer = new ws.Server({ noServer: true });
     this.wsServer.on('connection', (socket, req: Request) => {

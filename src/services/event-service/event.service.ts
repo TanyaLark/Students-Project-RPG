@@ -1,26 +1,73 @@
-import { MessageObjectInterface } from "../../controllers/message-object.interface";
 import { SocketStorage } from "../../socket-storage/socket-storage";
-import { EventsEnum } from "../../enums/events.enum";
+import {
+  AbilityEvent, AbilityEventFactory,
+  AttackEvent, AttackEventFactory,
+  MessageEvent,
+  MessageEventFactory,
+  RestoreEvent, RestoreEventFactory
+} from "../../controllers/event-factory/event-factory";
 
-export function eventAttack(messageObject: MessageObjectInterface) {
-  console.log(`ATTACK ${messageObject.event_data.target_id}`);
+export function eventAttack(senderId: string, targetId: string) {
+  const newAttackEvent = new AttackEventFactory().createEvent(targetId);
+  console.log(`ATTACK`);
 }
 
-export function eventAbility(messageObject: MessageObjectInterface) {
-  console.log(`POWER ${messageObject.event_data.target_id}`);
+function activateAttack(event: AttackEvent, senderId: string) {
+  // in this function we should find player
+  // who sent event (attacker), and player who has been attacked,
+  // and we pass attacked player instance in "attack" method of the attacker
 }
 
-export function eventMessage(messageObject: MessageObjectInterface, emitterUserId: string) {
-  SocketStorage.sendMessageToAll(emitterUserId,
-    {
-      event_type: EventsEnum.message,
-      event_data: {
-        target_id: "qwe-qwe to all",
-      }
-    });
-  console.log("MESSAGE");
+export function eventAbility(senderId: string, targetId: string | null) {
+  let newAbilityEvent: AbilityEvent;
+  if (targetId !== null) {
+    newAbilityEvent = new AbilityEventFactory().createEvent(targetId);
+  }
+  newAbilityEvent = new AbilityEventFactory().createEvent(senderId);
+  console.log(`POWER`);
 }
 
-export function eventRevival(messageObject: MessageObjectInterface) {
-  console.log(`REVIVAL ${messageObject.event_data.target_id}`);
+function activateAbility(event: AbilityEvent, senderId: string) {
+  // in this function we should find target player
+  // and if target player is the player who use ability we call "use ability"
+  // in instance of this player, else we make a "mage course" on target player instance
+}
+
+export function eventMessage(
+  senderId: string,
+  target_id: string | null,
+  messageText: string,
+) {
+  const newMessage = new MessageEventFactory().createEvent(messageText);
+  return sendMessage(newMessage, senderId, target_id);
+}
+
+function sendMessage(message: MessageEvent, senderId: string, targetId: string | null): void {
+  if (targetId !== null) {
+    const targetSocket = SocketStorage.getSocket(targetId);
+    if (!targetSocket) {
+
+    }
+    targetSocket.send(JSON.stringify(message));
+    console.log(`Massage to user ${message.message}`);
+    return;
+  }
+  const allSocketsData = SocketStorage.getAllSockets();
+  for (const socketData of allSocketsData) {
+    if (socketData.userId === targetId) {
+      continue;
+    }
+    socketData.socket.send(JSON.stringify(message));
+  }
+  console.log(`Massage to all users ${message.message}`);
+  return;
+}
+
+export function eventRevival(senderId: string) {
+  const newRestoreEvent = new RestoreEventFactory().createEvent();
+  console.log(`REVIVAL`);
+}
+
+function activateRestore(event: RestoreEvent, senderId: string) {
+  // in this function we should find player's character in mongo db and call restore event on it
 }

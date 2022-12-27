@@ -3,6 +3,7 @@ import validator from "validator";
 import { ERRORS_TEXT } from "../../errors/errors-text";
 import { validateStringWithEnum } from "../../helpers/string-enum-validation";
 import { CharactersEnum } from "../../enums/characters.enum";
+import { HttpError } from "../../errors/http-error.class";
 
 export default function userRegisterValidator(
   req: Request,
@@ -16,18 +17,15 @@ export default function userRegisterValidator(
   const character = req.body['character'];
 
   if (!nickname || !email || !password || !confirmPassword || !character) {
-    res.status(400).send(ERRORS_TEXT.REQUIRED_PARAMETER_MISSING);
-    next();
+    next(new HttpError(400, ERRORS_TEXT.REQUIRED_PARAMETER_MISSING, 'validation'));
   }
 
   if (validator.isEmpty(nickname)) {
-    res.status(400).send(ERRORS_TEXT.ENTER_NICKNAME);
-    next();
+    next(new HttpError(400, ERRORS_TEXT.ENTER_NICKNAME, 'validation'));
   }
 
   if (!validator.isEmail(email)) {
-    res.status(400).send(ERRORS_TEXT.INVALID_EMAIL);
-    next();
+    next(new HttpError(400, ERRORS_TEXT.INVALID_EMAIL, 'validation'));
   }
 
   if (!validator.isStrongPassword(password, {
@@ -38,18 +36,16 @@ export default function userRegisterValidator(
     minSymbols: 0,
     returnScore: false,
   })) {
-    res.status(400).send(ERRORS_TEXT.INVALID_PASSWORD);
-    next();
+    next(new HttpError(400, ERRORS_TEXT.INVALID_PASSWORD, 'validation'));
   }
 
   if (confirmPassword !== password) {
-    res.status(400).send(ERRORS_TEXT.PASSWORDS_DO_NOT_MATCH);
-    next();
+    next(new HttpError(400, ERRORS_TEXT.PASSWORDS_DO_NOT_MATCH, 'validation'));
   }
 
   if (!validateStringWithEnum(character, CharactersEnum)) {
-    res.status(400).send(ERRORS_TEXT.INVALID_CHARACTER);
-    next();
+    next(new HttpError(400, ERRORS_TEXT.INVALID_CHARACTER, 'validation'));
   }
+
   next();
 }

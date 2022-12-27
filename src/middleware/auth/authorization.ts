@@ -1,6 +1,7 @@
 import { NextFunction, Request, Response } from "express";
 import { ERRORS_TEXT } from "../../errors/errors-text";
 import * as jwt from 'jsonwebtoken';
+import { HttpError } from "../../errors/http-error.class";
 
 export default function authorization(
   req: RequestWithDecodedInfo,
@@ -12,25 +13,23 @@ export default function authorization(
   }
   const token = getTokenFromHeader(req) as string;
   if (!token) {
-    res.status(401).send(ERRORS_TEXT.UNAUTHORIZED);
-    return;
+    next(new HttpError(401, ERRORS_TEXT.UNAUTHORIZED, 'authorization'))
   }
   try {
     req.decodedInfoFromJWT = jwt.verify(token, process.env.JWT_SECRET) as DecodedUserInfo;
     next();
   } catch (e) {
-    res.status(401).send(ERRORS_TEXT.UNAUTHORIZED);
-    return;
+    next(new HttpError(401, ERRORS_TEXT.UNAUTHORIZED, 'authorization'))
   }
 }
 
 function getTokenFromHeader(req: Request) {
   const authorization = req.headers.authorization;
   if (!authorization) {
-    return;
+    return null;
   }
   if (authorization.split(" ").length != 2) {
-    return;
+    return null;
   }
   const [tag, token] = authorization.split(" ");
   if (tag === "Token" || tag === "Bearer") {

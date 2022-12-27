@@ -12,6 +12,7 @@ export function wsEventHandler(socket: ws.WebSocket, request: Request) {
     const token = request.headers.token as string;
     userId = (jwt.verify(token, process.env.JWT_SECRET as string) as any).id;
   } catch (e) {
+    console.error(e);
     socket.close();
   }
   console.log('connection event triggered');

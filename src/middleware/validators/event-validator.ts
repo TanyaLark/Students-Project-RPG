@@ -1,10 +1,10 @@
-import { EventsEnum } from "../../enums/events.enum";
+import { EventTypeEnum } from "../../enums/eventTypeEnum";
 import WebSocket from "ws";
 import { ERRORS_TEXT } from "../../errors/errors-text";
 import validator from "validator";
 
 export function eventValidator(message: WebSocket.RawData) {
-  const supportedEvents = Object.keys(EventsEnum);
+  const supportedEvents = Object.keys(EventTypeEnum);
   let parsedMessage;
   try {
     parsedMessage = JSON.parse(message.toString());

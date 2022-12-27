@@ -1,4 +1,4 @@
-export enum EventsEnum {
+export enum EventTypeEnum {
   attack = "attack",
   ability = "ability",
   message = "message",

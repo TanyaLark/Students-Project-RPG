@@ -1,5 +1,6 @@
 import { NextFunction, Request, Response } from "express";
 import { ERRORS_TEXT } from "../../errors/errors-text";
+import { HttpError } from "../../errors/http-error.class";
 
 export default function userLoginValidator(
   req: Request,
@@ -10,8 +11,7 @@ export default function userLoginValidator(
   const password = req.body['password'];
 
   if (!email || !password) {
-    res.status(400).send(ERRORS_TEXT.REQUIRED_PARAMETER_MISSING);
-    next();
+    next(new HttpError(400, ERRORS_TEXT.REQUIRED_PARAMETER_MISSING, 'login validation'));
   }
   next();
 }

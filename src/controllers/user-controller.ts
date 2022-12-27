@@ -8,6 +8,7 @@ import { RequestWithDecodedInfo } from "../middleware/auth/authorization";
 import { buildUserRO } from "../entities/user/utils/build-user-response-object";
 import { ERRORS_TEXT } from "../errors/errors-text";
 import { generateJwtToken } from "../authorization/generate-jwt-token";
+import { HttpError } from "../errors/http-error.class";
 
 export async function userRegisterController(
   req: Request,
@@ -36,12 +37,10 @@ export async function userLoginController(
   const password = req.body['password'];
   const foundUser = await userLoginService(email);
   if (!foundUser) {
-    res.status(401).send(ERRORS_TEXT.USER_NOT_FOUND);
-    return;
+    next(new HttpError(401, ERRORS_TEXT.USER_NOT_FOUND, 'userLoginController'));
   }
   if (foundUser.email !== email || foundUser.password !== password) {
-    res.status(401).send(ERRORS_TEXT.UNAUTHORIZED);
-    return;
+    next(new HttpError(401, ERRORS_TEXT.UNAUTHORIZED, 'userLoginController'));
   }
 
   res.send(generateJwtToken({
