@@ -1,7 +1,12 @@
 import { Request, Response } from 'express';
-import { classService } from "../services/class-service/class.service";
+import { ClassService } from "../services/class-service/class.service";
 
-export async function classController(req: Request, res: Response) {
-  res.status(200).send(await classService());
-  return;
+const classService = new ClassService;
+
+export class ClassController {
+  async getClassStatus(req: Request, res: Response) {
+    res.status(200).send(await classService.getClass());
+    return;
+  }
 }
+

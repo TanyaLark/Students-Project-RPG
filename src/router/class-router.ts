@@ -1,9 +1,10 @@
 import express from "express";
 import authorization from "../middleware/auth/authorization";
-import { classController } from "../controllers/class-controller";
+import { ClassController } from "../controllers/class-controller";
 
 const classRouter = express.Router();
+const classController = new ClassController;
 
-classRouter.get('/all', authorization, classController);
+classRouter.get('/all', authorization, classController.getClassStatus);
 
 export { classRouter };

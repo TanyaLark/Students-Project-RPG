@@ -1,5 +1,7 @@
 import { availableCharacters } from "../../constants";
 
-export async function classService() {
-  return availableCharacters;
+export class ClassService {
+  async getClass() {
+    return availableCharacters;
+  }
 }

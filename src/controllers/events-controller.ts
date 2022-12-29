@@ -1,24 +1,26 @@
 import { EventTypeEnum } from "../enums/eventTypeEnum";
-import { eventAttack, eventMessage, eventAbility, eventRevival } from "../services/event-service/event.service";
+import { EventService } from "../services/event-service/event.service";
 import { MessageObjectInterface } from "./message-object.interface";
+
+const eventService = new EventService;
 
 export function handleEvent(messageObject: MessageObjectInterface, senderUserId: string) {
   switch (messageObject.event_type) {
 
     case EventTypeEnum.attack:
-      eventAttack(senderUserId, messageObject.event_data.target_id);
+      eventService.eventAttack(senderUserId, messageObject.event_data.target_id);
       break;
 
     case EventTypeEnum.ability:
-      eventAbility(senderUserId, messageObject.event_data.target_id);
+      eventService.eventAbility(senderUserId, messageObject.event_data.target_id);
       break;
 
     case EventTypeEnum.message:
-      eventMessage(senderUserId, messageObject.event_data.target_id, messageObject.message);
+      eventService.eventMessage(senderUserId, messageObject.event_data.target_id, messageObject.message);
       break;
 
     case EventTypeEnum.revival:
-      eventRevival(senderUserId);
+      eventService.eventRevival(senderUserId);
       break;
   }
 }
